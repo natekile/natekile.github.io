@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портал Прокуратуры</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="top-accent-bar"></div>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <span class="logo-icon">⚖️</span>
+                <div class="logo-text">
+                    <span class="logo-title">ПРОКУРАТУРА</span>
+                    <span class="logo-subtitle">Официальный портал</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="showSection('home')">Главная</button>
+                <button class="nav-btn" onclick="showSection('appeal')">Подать обращение</button>
+                <button class="nav-btn" onclick="showSection('staff-directory'); loadPublicStaff()">Состав прокуратуры</button>
+                <button id="nav-dashboard" class="nav-btn hidden" onclick="showSection('dashboard')">Панель управления</button>
+                <button id="nav-login" class="nav-btn login-accent" onclick="showSection('auth')">Портал сотрудников</button>
+                <button id="nav-logout" class="nav-btn logout-accent hidden">Выйти</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Главная страница -->
+        <section id="home" class="section-content active fade-in">
+            <div class="hero-block">
+                <div class="crest-decor">⚜️</div>
+                <h1>Официальный портал Прокуратуры</h1>
+                <p class="hero-lead">Защита конституционных прав и свобод граждан, обеспечение верховенства закона, укрепление законности и правопорядка.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-gold" onclick="showSection('appeal')">Подать официальное обращение</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Подача обращения -->
+        <section id="appeal" class="section-content hidden fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Подача электронного обращения</h2>
+                    <p>Заполните форму ниже. Все обращения автоматически регистрируются в базе и направляются уполномоченным сотрудникам.</p>
+                </div>
+                <form id="appealForm" class="portal-form">
+                    <div class="form-group">
+                        <label for="appealName">Ваше Имя и Фамилия (ФИО)</label>
+                        <input type="text" id="appealName" placeholder="Иван Иванов" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appealText">Текст обращения / Суть заявления</label>
+                        <textarea id="appealText" placeholder="Подробно изложите ситуацию, укажите дату, время, участников и суть вашего правового обращения..." rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="appealEvidence">Доказательства нарушения (Ссылки на Imgur, YouTube, Я.Диск и т.д.)</label>
+                        <input type="url" id="appealEvidence" placeholder="https://www.youtube.com/watch?v=..." required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Направить обращение</button>
+                </form>
+                <div id="appealStatus" class="status-msg"></div>
+            </div>
+        </section>
+
+        <!-- Состав прокуратуры -->
+        <section id="staff-directory" class="section-content hidden fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Действующий состав Прокуратуры</h2>
+                    <p>Официальный реестр уполномоченных сотрудников органов юстиции.</p>
+                </div>
+                <div id="publicStaffList" class="staff-grid">
+                    <!-- Загружается из БД через JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Авторизация и Запрос доступа -->
+        <section id="auth" class="section-content hidden fade-in">
+            <div class="auth-grid">
+                <!-- Вход -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Вход для сотрудников</h2>
+                    </div>
+                    <form id="loginForm" class="portal-form">
+                        <div class="form-group">
+                            <label for="loginDiscordId">Discord ID (Цифровой)</label>
+                            <input type="text" id="loginDiscordId" placeholder="384920194820192841" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Пароль</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Войти в систему</button>
+                    </form>
+                </div>
+
+                <!-- Регистрация -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Регистрация сотрудника</h2>
+                    </div>
+                    <form id="registerForm" class="portal-form">
+                        <div class="form-group">
+                            <label for="regName">Имя и Фамилия (RP)</label>
+                            <input type="text" id="regName" placeholder="Джон Доу" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regDiscordId">Discord ID (Цифровой)</label>
+                            <input type="text" id="regDiscordId" placeholder="384920194820192841" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Пароль</label>
+                            <input type="password" id="regPassword" placeholder="Минимум 6 символов" required>
+                        </div>
+                        <button type="submit" class="btn btn-gold">Подать заявку</button>
+                    </form>
+                    <p class="form-notice">Внимание: новые аккаунты активируются исключительно после одобрения руководством.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ожидание одобрения -->
+        <section id="pending-approval" class="section-content hidden fade-in">
+            <div class="card text-center">
+                <div class="status-icon">⏳</div>
+                <h2>Аккаунт ожидает подтверждения</h2>
+                <p>Ваша учетная запись успешно зарегистрирована в системе, но еще не была одобрена уполномоченным руководством.</p>
+                <p>Пожалуйста, свяжитесь с высшим руководством для завершения верификации.</p>
+                <button id="btn-pending-logout" class="btn btn-secondary" style="margin-top: 20px;">Вернуться на главную</button>
+            </div>
+        </section>
+
+        <!-- Панель управления (Dashboard) -->
+        <section id="dashboard" class="section-content hidden fade-in">
+            <div class="dashboard-header">
+                <div class="user-badge">
+                    <span class="user-icon">👤</span>
+                    <div class="user-details">
+                        <span id="user-name-display" class="user-email" style="color: #fff; margin-bottom: 2px;"></span>
+                        <span id="user-discord-display" class="user-email" style="font-size: 0.85rem; color: var(--color-muted);">...</span>
+                        <span id="user-role-display" class="role-tag">...</span>
+                    </div>
+                </div>
+                <div class="dashboard-tabs">
+                    <button id="tab-appeals" class="tab-btn active" onclick="switchDashboardTab('appeals')">Обращения граждан</button>
+                    <button id="tab-staff" class="tab-btn hidden" onclick="switchDashboardTab('staff')">Управление персоналом ⚙️</button>
+                </div>
+            </div>
+
+            <!-- Вкладка: Обращения -->
+            <div id="dash-appeals-content" class="dash-tab-content">
+                <h3 class="sub-section-title">Реестр обращений граждан</h3>
+                <div id="appealsList" class="appeals-list">
+                    <!-- Загружается из БД через JS -->
+                </div>
+            </div>
+
+            <!-- Вкладка: Персонал -->
+            <div id="dash-staff-content" class="dash-tab-content hidden">
+                <h3 class="sub-section-title">Верификация сотрудников и распределение прав</h3>
+                <div class="card no-padding">
+                    <div class="table-container">
+                        <table class="staff-table">
+                            <thead>
+                                <tr>
+                                    <th>Сотрудник</th>
+                                    <th>Discord ID</th>
+                                    <th>Статус</th>
+                                    <th>Текущая должность</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffList">
+                                <!-- Загружается из БД через JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Портал Правительства и Органов Юстиции. Все права защищены. Разработано для государственных ведомств.</p>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+    <script>
+        window.showSection = function(id) {
+            document.querySelectorAll('.section-content').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('active');
+            });
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('active');
+            }
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtns = document.querySelectorAll(`[onclick*="showSection('${id}')"]`);
+            if (activeBtns.length > 0) activeBtns[0].classList.add('active');
+        }
+
+        window.switchDashboardTab = function(tabName) {
+            document.querySelectorAll('.dash-tab-content').forEach(content => content.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(`dash-${tabName}-content`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
