@@ -167,7 +167,7 @@ if (appealForm) {
             if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL.startsWith("https://")) {
                 const payload = {
                     embeds: [{
-                        title: "🚨 Зарегистрировано официальное обращение",
+                        title: "<@&1517670143403233343> 🚨 Зарегистрировано официальное обращение",
                         color: 13411380,
                         fields: [
                             { name: "Заявитель", value: name, inline: true },
